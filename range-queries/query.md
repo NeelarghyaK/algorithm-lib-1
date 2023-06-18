@@ -43,6 +43,7 @@
 * https://cp-algorithms.com/data_structures/fenwick.html </br>
 * [Intuition behind update](https://www.youtube.com/watch?v=Ti_U3Q_G7yM&t=2404s) </br>
 
+
 <li> 1-D BIT tree
     
 ```cpp
@@ -58,7 +59,24 @@
         for(;i<n;i=i|(i+1)) bit[i] += x;
     }
 ```
-                   
+
+1-Based Indexing 
+		 
+```cpp
+	int query(int i){
+		int ans = 0;
+		for (;i>0;i-=i&-i) ans += fen[i];
+		return ans;
+	}
+	void update(int i,int val){
+		for(;i<MAXN;i+=i&-i) fen[i] += val;
+	}
+			       
+	void clean(int i){ // This step is important for multiple test case. You clean only things you touched avoiding TLE
+		for(;i<MAXN;i+=i&-i) fen[i]=0;
+	}    
+```
+		   
 ![image](https://user-images.githubusercontent.com/21307343/132801474-bb611c3d-4daf-478c-8693-95b011a93beb.png)
 
 <li> 2-D BIT tree
@@ -350,6 +368,32 @@ void update_x(int vx, int lx, int rx, int x, int y, int new_val) {
     update_y(vx, lx, rx, 1, 0, m-1, x, y, new_val);
 }
 
+```
+
+### Get the nearest element from a given element in a range 
+
+```cpp
+int get_first(int v, int lv, int rv, int l, int r, int x) {
+    if(lv > r || rv < l) return -1;
+    if(l <= lv && rv <= r) {
+        if(t[v] <= x) return -1;
+        while(lv != rv) {
+            int mid = lv + (rv-lv)/2;
+            if(t[2*v] > x) {
+                v = 2*v;
+                rv = mid;
+            }else {
+                v = 2*v+1;
+                lv = mid+1;
+            }
+        }
+        return lv;
+    }
+
+    int mid = lv + (rv-lv)/2;
+    int rs = get_first(2*v, lv, mid, l, r, x);
+    if(rs != -1) return rs;
+    return get_first(2*v+1, mid+1, rv, l ,r, x);
 ```
 
 ## Sqrt Decomposition

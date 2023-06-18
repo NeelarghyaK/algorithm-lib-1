@@ -1,3 +1,5 @@
+<a name="a"/>
+
 `Find all solution to the equation ax+by=c where a in [minx,maxx], b in [miny,maxy]`
 ```cpp
 
